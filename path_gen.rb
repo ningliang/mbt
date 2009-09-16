@@ -18,16 +18,6 @@ def snapshot(arr)
   ret
 end
 
-def arr_equals(arr1, arr2) 
-  return false unless arr1.length == arr2.length
-  equals = true
-  arr1.each_index do |i|
-    equals = equals && (arr1[i] == arr2[i])
-    break unless equals
-  end
-  equals
-end
-
 # Load file and graphs
 
 file = ARGV[0]
