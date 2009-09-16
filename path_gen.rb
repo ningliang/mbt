@@ -28,12 +28,6 @@ def arr_equals(arr1, arr2)
   equals
 end
 
-def path_exists(path_array, path)
-  found = path_array.find do |existing_path| arr_equals(existing_path, path) end
-  !found.nil?
-end
-
-
 # Load file and graphs
 
 file = ARGV[0]
@@ -54,9 +48,15 @@ specification = JSON.parse(data)
 
 edge_name_graph = {}
 final_edge_names = []
+all_edge_names = []
 edges = {}
+
 stack = []
 paths = []
+error_paths = []
+
+visited_paths = {}
+visited_error_paths = {}
 
 # Process specification
 start = {
@@ -68,6 +68,7 @@ specification["edges"].push(start)
 specification["edges"].each do |current|
   # Put the edges into a dictionary for easy access
   edges[current["name"]] = current
+  all_edge_names.push current["name"]
   
   # Get the final edges
   if specification["end"].include? current["to"]
@@ -94,10 +95,12 @@ until stack.empty?
     edge_name_graph[edge_name].each do |next_name|
       unless stack.include? next_name
         stack.push next_name
-        if path_exists(paths, stack)
+        hash = stack.join ","
+        if visited_paths[hash]
           stack.pop
         else
           paths.push snapshot(stack)
+          visited_paths[hash] = true
           has_new_child_path = true
           break;
         end
@@ -112,12 +115,39 @@ paths = paths.find_all do |path|
   final_edge_names.include? path.last
 end
 
-puts edge_name_graph.to_json
+# Generate error paths
+paths.each do |path|
+  (1..(path.length)).each do |n|
+    # Get the last action in this success chain
+    subpath = path.first(n)
+    action = subpath.last
+    
+    # For all illegal actions, generate a path and add if new
+    illegal_actions = all_edge_names.delete_if do |item| edge_name_graph[action].include? item end
+    illegal_actions.delete "Start"
+    illegal_actions.each do |illegal_action|
+      new_subpath = subpath.push illegal_action
+      unless visited_error_paths[new_subpath.join(",")] 
+        visited_error_paths[new_subpath.join(",")] = true
+        error_paths.push snapshot(new_subpath)
+      end
+    end
+  end
+end
+
+puts "VALID PATHS"
 
 # Print out all paths
 paths.each do |path|
-  path_string = path.join ","
-  puts path_string
+  puts path.join(",")
 end
-
 puts "#{paths.length} paths found."
+
+puts "INVALID PATHS"
+
+# Print out all error paths
+error_paths.each do |error_path|
+  puts error_path.join(",")
+end
+puts "#{error_paths.length} invalid paths."
+
