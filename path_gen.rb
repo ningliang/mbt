@@ -135,6 +135,7 @@ paths.each do |path|
   end
 end
 
+puts
 puts "VALID PATHS"
 
 # Print out all paths
@@ -143,6 +144,7 @@ paths.each do |path|
 end
 puts "#{paths.length} paths found."
 
+puts
 puts "INVALID PATHS"
 
 # Print out all error paths
