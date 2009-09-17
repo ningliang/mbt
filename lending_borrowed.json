@@ -1,16 +1,16 @@
 {
 	"start": "None",
-	"end": ["None"],
+	"end": ["Deleted"],
 	"edges": [
-		{ "name": "OfferLend", "from": "None", "to": "PendingBorrowed" },
-		{ "name": "View", "from": "PendingBorrowed", "to": "PendingViewed" },
-		{ "name": "Reject", "from": "PendingBorrowed", "to": "None" },
-		{ "name": "Accept", "from": "PendingBorrowed", "to": "Accepted" },
-		{ "name": "Expire", "from": "PendingBorrowed", "to": "None" },
-		{ "name": "AcceptViewed", "from": "PendingViewed", "to": "Accepted" },
-		{ "name": "Return", "from": "Accepted", "to": "Returned" },
+		{ "name": "OfferLend", "from": "None", "to": "PendingBorrowed" },		
+		{ "name": "Return", "from": "Accepted", "to": "Returned" },		
 		{ "name": "ExpireAccepted", "from": "Accepted", "to": "Expired" },
-		{ "name": "PurchaseReturned", "from": "Returned", "to": "None" },
-		{ "name": "PurchaseExpired", "from": "Expired", "to": "None" }
+		{ "name": "Accept", "from": "PendingBorrowed", "to": "Accepted" },
+		{ "name": "AcceptViewed", "from": "PendingViewed", "to": "Accepted" },
+		{ "name": "View", "from": "PendingBorrowed", "to": "PendingViewed" },
+		{ "name": "Expire", "from": "PendingBorrowed", "to": "Deleted" },
+		{ "name": "Reject", "from": "PendingBorrowed", "to": "Deleted" },
+		{ "name": "PurchaseExpired", "from": "Expired", "to": "Deleted" },
+		{ "name": "PurchaseReturned", "from": "Returned", "to": "Deleted" }
 	]
 }

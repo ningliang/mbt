@@ -48,7 +48,7 @@ error_paths = []
 visited_paths = {}
 visited_error_paths = {}
 
-# Process specification
+# Process specification - append a Start state for convenience
 start = {
   "name" => "Start",
   "from" => nil,
@@ -100,26 +100,35 @@ until stack.empty?
   end
 end
 
-# Prune the paths for complete paths only
+# Prune the paths for complete paths only and trim "Start" from paths and all_edge_names
 paths = paths.find_all do |path|
   final_edge_names.include? path.last
 end
+paths.map! do |path| path.last(path.length - 1) end
+all_edge_names.delete "Start"
+edges["Start"] = nil
 
-# Generate error paths
+# Generate error paths - begin with transitions that don't begin at start node
+all_edge_names.each do |edge_name|
+  unless edges[edge_name]["from"].eql? specification["start"]
+    error_paths.push [edge_name]
+  end
+end
+
+# For each subpath of a valid path, enumerate illegal transitions
 paths.each do |path|
   (1..(path.length)).each do |n|
     # Get the last action in this success chain
     subpath = path.first(n)
     action = subpath.last
     
-    # For all illegal actions, generate a path and add if new
-    illegal_actions = all_edge_names.delete_if do |item| edge_name_graph[action].include? item end
-    illegal_actions.delete "Start"
+    illegal_actions = all_edge_names.find_all do |item| !edge_name_graph[action].include? item end
     illegal_actions.each do |illegal_action|
-      new_subpath = subpath.push illegal_action
-      unless visited_error_paths[new_subpath.join(",")] 
-        visited_error_paths[new_subpath.join(",")] = true
-        error_paths.push snapshot(new_subpath)
+      error_path = subpath + [illegal_action]
+      key = error_path.join(",")
+      unless visited_error_paths[key]
+        visited_error_paths[key] = true
+        error_paths.push snapshot(error_path)
       end
     end
   end

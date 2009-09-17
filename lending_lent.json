@@ -1,13 +1,13 @@
 {
 	"start": "None",
-	"end": ["None"],
+	"end": ["Back"],
 	"edges": [
 		{ "name": "LendOffer", "from": "None", "to": "PendingLend" },
-		{ "name": "RejectPending", "from": "PendingLend", "to": "None" },
-		{ "name": "ExpireOffer", "from": "PendingLend", "to": "None" },
+		{ "name": "RejectPending", "from": "PendingLend", "to": "Back" },
+		{ "name": "ExpireOffer", "from": "PendingLend", "to": "Back" },
 		{ "name": "Accept", "from": "PendingLend", "to": "Lent" },
 		{ "name": "Return", "from": "Lent", "to": "LenderHold" },
-		{ "name": "ExpireLend", "from": "Lent", "to": "None" },
-		{ "name": "ExpireLend", "from": "LenderHold", "to": "None" }
+		{ "name": "ExpireLend", "from": "Lent", "to": "Back" },
+		{ "name": "ExpireLend", "from": "LenderHold", "to": "Back" }
 	]
 }

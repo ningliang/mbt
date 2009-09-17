@@ -5,6 +5,9 @@
 		{ "name": "Jump", "from": "A", "to": "B" },
 		{ "name": "Swim", "from": "A", "to": "C" },
 		{ "name": "Run", "from": "A", "to": "F" },
+		{ "name": "Approve", "from": "E", "to": "D" },
+		{ "name": "Condone", "from": "E", "to": "F" },
+		{ "name": "Pluck", "from": "F", "to": "A" },
 		{ "name": "Hide", "from": "B", "to": "A" },
 		{ "name": "Leap", "from": "B", "to": "C" },
 		{ "name": "Throw", "from": "B", "to": "E" },
@@ -15,9 +18,6 @@
 		{ "name": "Prototype", "from": "D", "to": "A" },
 		{ "name": "Build", "from": "D", "to": "D" },
 		{ "name": "Destroy", "from": "E", "to": "B" },
-		{ "name": "Approve", "from": "E", "to": "D" },
-		{ "name": "Condone", "from": "E", "to": "F" },
-		{ "name": "Pluck", "from": "F", "to": "A" },
 		{ "name": "Dive", "from": "F", "to": "C" },
 		{ "name": "Risk", "from": "F", "to": "D" }
 	]
