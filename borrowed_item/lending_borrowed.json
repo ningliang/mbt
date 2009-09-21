@@ -7,6 +7,8 @@
 		{ "name": "ExpireAccepted", "from": "Accepted", "to": "Expired" },
 		{ "name": "Accept", "from": "PendingBorrowed", "to": "Accepted" },
 		{ "name": "AcceptViewed", "from": "PendingViewed", "to": "Accepted" },
+		{ "name": "ExpireViewed", "from": "PendingViewed", "to": "Deleted" },
+		{ "name": "RejectViewed", "from": "PendingViewed", "to": "Deleted" },
 		{ "name": "View", "from": "PendingBorrowed", "to": "PendingViewed" },
 		{ "name": "Expire", "from": "PendingBorrowed", "to": "Deleted" },
 		{ "name": "Reject", "from": "PendingBorrowed", "to": "Deleted" },
