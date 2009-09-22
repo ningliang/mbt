@@ -69,7 +69,7 @@ def code_to_transition(edge, expected)
     when /Reject/ then 
       switch_user("lendee") +
       "\t#{log("Rejecting")}\n" + 
-      "\tdecideLend(product, #{expected});"
+      "\tdecideLend(product, false, #{expected});"
     when "View" then 
       switch_user("lendee") +
       "\t#{log("Viewing")}\n" + 
@@ -91,7 +91,6 @@ def code_to_verify(state)
     when "None" then
       switch_user("lendee") +
       "\t#{log("Should be ABSENT")}\n" + 
-      "\tSystem.out.println(\"Current state is \" + LockerService.getProductState(product).getLendingState());\n" +
       "\tassertTrue(LockerService.getContent(product.getEan()) == null);\n"
     when "PendingBorrowed" then
       switch_user("lendee") +
@@ -100,7 +99,7 @@ def code_to_verify(state)
       "\tassertTrue(LockerService.getProductState(product).getLendingState().equals(LendingState.PENDING_BORROW));\n"
     when "Accepted" then
       switch_user("lendee") +
-      "\t#{log("Should be ACCEPTED")}\n" +
+      "\t#{log("Should be BORROWED")}\n" +
       "\tSystem.out.println(\"Current state is \" + LockerService.getProductState(product).getLendingState());\n" +
       "\tassertTrue(LockerService.getProductState(product).getLendingState().equals(LendingState.BORROWED));\n"
     when "PendingViewed" then
@@ -121,7 +120,6 @@ def code_to_verify(state)
     else # Deleted
       switch_user("lendee") +
       "\t#{log("Should be ABSENT")}\n" +
-      "\tSystem.out.println(\"Current state is \" + LockerService.getProductState(product).getLendingState());\n" +
       "\tassertTrue(LockerService.getContent(product.getEan()) == null);\n"
   end
   puts code
@@ -131,7 +129,8 @@ def switch_user(user)
   "\t#{log("Switching to #{user}")}\n" + 
   "\tLockerService.resetLocker();\n" +
   "\tProxyFactory.getDefaultProxy().clearCookies();\n" +
-  "\tDeviceService.register(#{user}.getEmail(), #{user}.getPassword(), #{user}Device, DEVICE_NAME, null, null);\n"   
+  "\tDeviceService.register(#{user}.getEmail(), #{user}.getPassword(), #{user}Device, DEVICE_NAME, null, null);\n" +
+  "\tLockerService.synchronize();\n"
 end
 
 def log(message)
