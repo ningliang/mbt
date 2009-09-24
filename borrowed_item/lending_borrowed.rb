@@ -4,29 +4,45 @@ $current_user = :none
 
 # Set up
 def generate_setup
-  puts "public void setUp() {"
-  puts "\ttry {"
-  puts "\t\tLockerService.resetLocker();"
-  puts "\t\tlender = randomAccount();"
-  puts "\t\tlendee = randomAccount();"
-  puts "\t\tcreateAccount(lender, null);"
-  puts "\t\tcreateAccount(lendee, null);"
-  puts "\t\tlenderDevice = randomDeviceId();"
-  puts "\t\tlendeeDevice = randomDeviceId();"
-	puts "\t\tDeviceService.register(lender.getEmail(), lender.getPassword(), randomDeviceId(), DEVICE_NAME, null, null);"
-	puts "\t\tcreateCreditCard(randomCreditCard(), null);"
-	puts "\t\tupdateCreditCardBillingAddress(randomBillingAddress(), null);"
-	puts "\t\tStoreService.purchaseProduct(StoreService.getProduct(\"9781602150591\"));"
-	puts "\t\tLockerService.synchronize();"
-	puts "\t\tproduct = LockerService.getContent(\"9781602150591\");"
-	puts "\t\tassertTrue(product != null);"
-	puts "\t\tassertTrue(LockerService.getProductState(product) != null);"
-	puts "\t\tLockerService.resetLocker();"
-  puts "\t\tProxyFactory.getDefaultProxy().clearCookies();"
-  puts "\t} catch (Exception e) {"
-  puts "\t\t e.printStackTrace(); assertTrue(false);"
-  puts "\t}"
-  puts "}"
+puts <<-eos
+public void setUp() {
+	try {
+		ProxyFactory.getDefaultProxy().clearCookies();
+		LockerService.resetLocker();
+	
+		// Clear cookies
+		lender = randomAccount();
+		lendee = randomAccount();
+		createAccount(lender, null);
+		createAccount(lendee, null);
+		lenderDevice = randomDeviceId();
+		lendeeDevice = randomDeviceId();
+	
+		// Create lendee CC
+		DeviceService.register(lendee.getEmail(), lendee.getPassword(), lendeeDevice, DEVICE_NAME, null, null);
+		createCreditCard(randomCreditCard(), null);
+		updateCreditCardBillingAddress(randomBillingAddress(), null);
+		ProxyFactory.getDefaultProxy().clearCookies();
+		LockerService.resetLocker();
+	
+		// Create lender CC and purchase product
+		DeviceService.register(lender.getEmail(), lender.getPassword(), lenderDevice, DEVICE_NAME, null, null);
+		createCreditCard(randomCreditCard(), null);
+		updateCreditCardBillingAddress(randomBillingAddress(), null);
+		StoreService.purchaseProduct(StoreService.getProduct("9781602150591"));
+		Thread.sleep(5000); // TODO Why does this take so long?!
+		LockerService.synchronize();
+		product = LockerService.getContent("9781602150591");
+		assertTrue(product != null);
+		assertTrue(LockerService.getProductState(product) != null);
+		LockerService.resetLocker();
+		ProxyFactory.getDefaultProxy().clearCookies();
+	} catch (Exception e) {
+		e.printStackTrace(); 
+		assertTrue(false);
+	}
+}
+eos
 end
 
 # Each path
@@ -115,6 +131,10 @@ def code_to_verify(state)
       "\t#{log("Should be RETURNED")}\n" +
       "\tSystem.out.println(\"Current state is \" + LockerService.getProductState(product).getLendingState());\n" +
       "\tassertTrue(LockerService.getProductState(product).getLendingState().equals(LendingState.RETURNED));\n"
+    when "Purchased" then
+      switch_user(:lendee) +
+      "\tSystem.out.println(\"Current state is \" + LockerService.getProductState(product).getLendingState());\n" +
+      "\tassertTrue(LockerService.getContent(product.getEan()) != null);\n"
     else # Deleted
       switch_user(:lendee) +
       "\t#{log("Should be ABSENT")}\n" +

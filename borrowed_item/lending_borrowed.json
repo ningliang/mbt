@@ -1,6 +1,6 @@
 {
 	"start": "None",
-	"end": ["Deleted"],
+	"end": ["Deleted", "Purchased"],
 	"edges": [
 		{ "name": "Offer", "from": "None", "to": "PendingBorrowed" },		
 		{ "name": "Return", "from": "Accepted", "to": "Returned" },		
@@ -12,7 +12,10 @@
 		{ "name": "Reject", "from": "PendingBorrowed", "to": "Deleted" },
 		{ "name": "RejectViewed", "from": "PendingViewed", "to": "Deleted" },
 		{ "name": "View", "from": "PendingBorrowed", "to": "PendingViewed" },	
-		{ "name": "PurchaseExpired", "from": "Expired", "to": "Deleted" },
-		{ "name": "PurchaseReturned", "from": "Returned", "to": "Deleted" }
+		{ "name": "PurchaseExpired", "from": "Expired", "to": "Purchased" },
+		{ "name": "PurchaseReturned", "from": "Returned", "to": "Purchased" },
+		{ "name": "PurchaseOffered", "from": "PendingBorrowed", "to": "Purchased" },
+		{ "name": "PurchaseViewed", "from": "PendingViewed", "to": "Purchased" },
+		{ "name": "PurchaseAccepted", "from": "Accepted", "to": "Purchased" }
 	]
 }
