@@ -2,20 +2,34 @@
 	"start": "None",
 	"end": ["Deleted", "Purchased"],
 	"edges": [
-		{ "name": "Offer", "from": "None", "to": "PendingBorrowed" },		
-		{ "name": "Return", "from": "Accepted", "to": "Returned" },		
-		{ "name": "Expire", "from": "PendingBorrowed", "to": "Deleted" },
-		{ "name": "ExpireAccepted", "from": "Accepted", "to": "Expired" },
-		{ "name": "ExpireViewed", "from": "PendingViewed", "to": "Deleted" },
-		{ "name": "Accept", "from": "PendingBorrowed", "to": "Accepted" },
-		{ "name": "AcceptViewed", "from": "PendingViewed", "to": "Accepted" },
-		{ "name": "Reject", "from": "PendingBorrowed", "to": "Deleted" },
-		{ "name": "RejectViewed", "from": "PendingViewed", "to": "Deleted" },
-		{ "name": "View", "from": "PendingBorrowed", "to": "PendingViewed" },	
-		{ "name": "PurchaseExpired", "from": "Expired", "to": "Purchased" },
-		{ "name": "PurchaseReturned", "from": "Returned", "to": "Purchased" },
-		{ "name": "PurchaseOffered", "from": "PendingBorrowed", "to": "Purchased" },
-		{ "name": "PurchaseViewed", "from": "PendingViewed", "to": "Purchased" },
-		{ "name": "PurchaseAccepted", "from": "Accepted", "to": "Purchased" }
+		{ "name": "Offer", "transitions": [
+			{"from": "None", "to": "PendingBorrowed"}
+		]},	
+		{ "name": "Return", "transitions": [
+			{"from": "Accepted", "to": "Returned"}
+		]},		
+		{ "name": "Expire", "transitions": [
+			{"from": "PendingBorrowed", "to": "Deleted"},
+			{"from": "Accepted", "to": "Expired"},
+			{"from": "PendingViewed", "to": "Deleted"} 
+		]},
+		{ "name": "Accept", "transitions": [
+			{"from": "PendingBorrowed", "to": "Accepted"},
+			{"from": "PendingViewed", "to": "Accepted"}
+		]},
+		{ "name": "Reject", "transitions": [
+			{"from": "PendingBorrowed", "to": "Deleted"},
+			{"from": "PendingViewed", "to": "Deleted"}
+		]},
+		{ "name": "View", "transitions": [
+			{"from": "PendingBorrowed", "to": "PendingViewed"}
+		]},
+		{ "name": "Purchase", "transitions": [
+			{"from": "Expired", "to": "Purchased"},
+			{"from": "Returned", "to": "Purchased"},
+			{"from": "PendingBorrowed", "to": "Purchased"},
+			{"from": "PendingOffered", "to": "Purchased"},
+			{"from": "Accepted", "to": "Purchased"}
+		]}
 	]
 }
