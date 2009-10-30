@@ -1,21 +1,23 @@
 require File.dirname(__FILE__) + "/../graph_path_explorer.rb"
 
+def generate_valid_path(path) 
+  puts ""
+  names = path.collect do |transition| transition["name"] end
+  puts "public void test#{names.to_s}() throws Exception {"
+  path.each do |transition|    
+    puts "\t#{transition["name"].downcase}Product(null);" unless transition["name"].eql? "Start"
+    puts "\tverify(\"#{transition["to"]}\");"
+  end
+  puts "}"
+end
+
 explorer = GraphPathExplorer.new("lending_borrowed.json")
-paths = explorer.valid_paths
-
-puts "VALID"
-
-paths.each do |path|
-  names = path.collect do |transition| transition["name"] end
-  puts names.to_json
+explorer.valid_paths.each do |path| 
+  # We cannot programmatically call expire
+  generate_valid_path(path) unless path.find do |transition|
+    transition["name"].eql? "Expire"
+  end
 end
+#explorer.invalid_paths.each do |path| generate_path(path) end
 
-puts "INVALID"
-
-invalid_paths = explorer.invalid_paths
-invalid_paths.each do |path|
-  names = path.collect do |transition| transition["name"] end
-  puts names.to_json
-end
-
-puts "#{paths.length} valid paths and #{invalid_paths.length} invalid paths"
+puts "#{explorer.valid_paths.length} valid paths and #{explorer.invalid_paths.length} invalid paths"
