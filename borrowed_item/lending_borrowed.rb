@@ -14,7 +14,7 @@ end
 def generate_invalid_path(path)
   puts ""
   names = path.collect do |transition| transition["name"] end
-  puts "public void test#{names.to_s}() throws Exception {"
+  puts "public void test#{names.to_s}Negative() throws Exception {"
   (0..(path.length - 2)).each do |index|
     transition = path[index]
     puts "\t#{transition["name"].downcase}Product(null);" unless transition["name"].eql? "Start"
