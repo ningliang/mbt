@@ -51,7 +51,7 @@ class GraphPathExplorer
         current["transitions"].each do |transition|
           legal = true if transition["from"].eql? node
         end
-        @invalid_transitions[node].push(edge(name, node, node))
+        @invalid_transitions[node].push(edge(name, node, node)) unless legal
       end
     end
   end
