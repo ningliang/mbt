@@ -64,7 +64,6 @@ class GraphPathExplorer
       visited = {}
       
       # Take the first path
-      previous = nil
       node = @start
       stack.push( edge(START, nil, node) )
       visited[stack.to_json] = true

@@ -29,7 +29,8 @@
 			{"from": "Returned", "to": "Purchased"},
 			{"from": "PendingBorrowed", "to": "Purchased"},
 			{"from": "PendingOffered", "to": "Purchased"},
-			{"from": "Accepted", "to": "Purchased"}
+			{"from": "Accepted", "to": "Purchased"},
+			{"from": "None", "to": "Purchased"}
 		]}
 	]
 }
