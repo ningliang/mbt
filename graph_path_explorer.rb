@@ -38,6 +38,7 @@ class GraphPathExplorer
         from = transition["from"]
         to = transition["to"]
         @transitions[from] = [] unless @transitions[from]
+        @transitions[to] = [] unless @transitions[to]
         @transitions[from].push({ "name" => name, "to" => to })
       end
     end
